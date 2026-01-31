@@ -73,7 +73,7 @@ export default function Register() {
                     </div>
 
                     <div>
-                        <label className="text-slate-400 text-xs font-medium mb-2 block">Password</label>
+                        <label className="text-slate-400 text-xs font-medium mb-2 block">Kata Sandi</label>
                         <div className="relative">
                             <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500">lock</span>
                             <input
@@ -98,14 +98,14 @@ export default function Register() {
                     </div>
 
                     <div>
-                        <label className="text-slate-400 text-xs font-medium mb-2 block">Konfirmasi Password</label>
+                        <label className="text-slate-400 text-xs font-medium mb-2 block">Konfirmasi Kata Sandi</label>
                         <div className="relative">
                             <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500">lock</span>
                             <input
                                 type={showPassword ? "text" : "password"}
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
-                                placeholder="Ulangi password"
+                                placeholder="Ulangi kata sandi"
                                 className={`w-full bg-slate-800/50 border rounded-xl p-4 pl-12 text-white placeholder-slate-600 outline-none transition-colors ${passwordMatch ? "border-slate-700 focus:border-primary" : "border-red-500"
                                     }`}
                                 required

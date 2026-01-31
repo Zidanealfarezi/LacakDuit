@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
-const timeframes = ["Week", "Month", "Year"];
+const timeframes = ["Minggu", "Bulan", "Tahun"];
 
 const chartData = [
     { month: "Mar", height: 60, active: false },
     { month: "Apr", height: 85, active: false },
-    { month: "May", height: 70, active: false },
+    { month: "Mei", height: 70, active: false },
     { month: "Jun", height: 100, active: true },
     { month: "Jul", height: 40, active: false },
 ];
@@ -74,13 +74,13 @@ export default function Reports() {
                     <span className="material-symbols-outlined text-primary font-bold">
                         analytics
                     </span>
-                    <h1 className="text-xl font-bold tracking-tight">Reports</h1>
+                    <h1 className="text-xl font-bold tracking-tight">Laporan</h1>
                 </div>
                 <button className="bg-primary/10 hover:bg-primary/20 text-primary px-4 py-2 rounded-full flex items-center gap-2 transition-colors">
                     <span className="material-symbols-outlined text-sm font-bold">
                         ios_share
                     </span>
-                    <span className="text-sm font-bold">Export</span>
+                    <span className="text-sm font-bold">Ekspor</span>
                 </button>
             </nav>
 
@@ -109,7 +109,7 @@ export default function Reports() {
                     <div className="flex justify-between items-start mb-6">
                         <div>
                             <h2 className="text-slate-500 dark:text-slate-400 text-sm font-medium">
-                                Monthly Comparison
+                                Perbandingan Bulanan
                             </h2>
                             <p className="text-2xl font-extrabold tracking-tight mt-1">
                                 Rp 12.850.000
@@ -154,8 +154,8 @@ export default function Reports() {
                 </section>
 
                 {/* Expense Breakdown */}
-                <section className="space-y-4">
-                    <h2 className="text-lg font-bold px-1">Expense Breakdown</h2>
+                <div className="bg-white dark:bg-card-dark rounded-xl shadow-sm border border-slate-100 dark:border-slate-800 p-4">
+                    <h2 className="text-lg font-bold px-1">Rincian Pengeluaran</h2>
 
                     {/* Donut Chart */}
                     <div className="bg-white dark:bg-card-dark rounded-xl p-6 shadow-sm">
@@ -288,14 +288,14 @@ export default function Reports() {
                             </div>
                         ))}
                     </div>
-                </section>
+                </div>
 
                 {/* Saving Insight */}
                 <div className="bg-primary rounded-xl p-5 text-white flex items-center justify-between shadow-lg shadow-primary/20">
                     <div className="space-y-1">
-                        <h3 className="font-bold text-sm">Saving Insight</h3>
+                        <h3 className="font-bold text-sm">Wawasan Hemat</h3>
                         <p className="text-xs opacity-90">
-                            You spent Rp 350.000 less on Food than last month. Keep it up!
+                            Pengeluaran makan Anda lebih hemat Rp 350.000 dibanding bulan lalu. Pertahankan!
                         </p>
                     </div>
                     <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center shrink-0">

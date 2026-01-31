@@ -186,8 +186,8 @@ export default function Settings() {
                             key={index}
                             to={item.path}
                             className={`flex flex-col items-center gap-1 ${location.pathname === item.path
-                                    ? "text-primary"
-                                    : "text-slate-400 dark:text-slate-500"
+                                ? "text-primary"
+                                : "text-slate-400 dark:text-slate-500"
                                 }`}
                         >
                             <span className="material-symbols-outlined">{item.icon}</span>

@@ -35,8 +35,8 @@ export default function TransactionHeader({ activeTab, onTabChange }) {
                                 onTabChange(tab.id);
                             }}
                             className={`flex flex-col items-center justify-center border-b-2 pb-3 pt-4 ${activeTab === tab.id
-                                    ? "border-primary text-primary"
-                                    : "border-transparent text-slate-500 dark:text-slate-400"
+                                ? "border-primary text-primary"
+                                : "border-transparent text-slate-500 dark:text-slate-400"
                                 }`}
                         >
                             <p className="text-sm font-bold leading-normal">{tab.label}</p>

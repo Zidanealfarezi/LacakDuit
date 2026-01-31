@@ -46,14 +46,14 @@ export default function SignIn() {
                     </div>
 
                     <div>
-                        <label className="text-slate-400 text-xs font-medium mb-2 block">Password</label>
+                        <label className="text-slate-400 text-xs font-medium mb-2 block">Kata Sandi</label>
                         <div className="relative">
                             <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500">lock</span>
                             <input
                                 type={showPassword ? "text" : "password"}
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                placeholder="Masukkan password"
+                                placeholder="Masukkan kata sandi"
                                 className="w-full bg-slate-800/50 border border-slate-700 rounded-xl p-4 pl-12 pr-12 text-white placeholder-slate-600 outline-none focus:border-primary transition-colors"
                                 required
                             />

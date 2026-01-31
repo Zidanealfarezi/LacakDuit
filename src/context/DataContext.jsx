@@ -92,6 +92,15 @@ export function DataProvider({ children }) {
     // Total balance is now based on assets
     const totalBalance = totalAssets;
 
+    // Helper to get date string in local time YYYY-MM-DD
+    const formatDate = (date) => {
+        const d = new Date(date);
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
     // Weekly spending (last 7 days)
     const getWeeklySpending = () => {
         const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -101,15 +110,17 @@ export function DataProvider({ children }) {
         for (let i = 6; i >= 0; i--) {
             const date = new Date(today);
             date.setDate(date.getDate() - i);
-            const dateStr = date.toISOString().split("T")[0];
+            const dateStr = formatDate(date);
 
             const dayExpenses = transactions
                 .filter(t => t.type === "expense" && t.date === dateStr)
                 .reduce((sum, t) => sum + t.amount, 0);
 
             weekData.push({
-                day: days[date.getDay() === 0 ? 6 : date.getDay() - 1],
+                day: days[date.getDay() === 0 ? 6 : date.getDay() - 1], // Adjust to Mon-Sun index
                 amount: dayExpenses,
+                date: dateStr, // Include date for matching
+                fullDate: date // Include full date object for sorting/display if needed
             });
         }
         return weekData;
@@ -132,7 +143,7 @@ export function DataProvider({ children }) {
         const newTransaction = {
             ...transaction,
             id: Date.now(),
-            date: transaction.date || new Date().toISOString().split("T")[0],
+            date: transaction.date || formatDate(new Date()),
         };
         setTransactions([newTransaction, ...transactions]);
 

@@ -7,6 +7,8 @@ import AddTransaction from "./pages/AddTransaction";
 import SignIn from "./pages/SignIn";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
+import EditProfile from "./pages/EditProfile";
+import Notifications from "./pages/Notifications";
 import Income from "./pages/Income";
 import Expenses from "./pages/Expenses";
 import Cards from "./pages/Cards";
@@ -25,6 +27,8 @@ function App() {
           <Route path="/login" element={<SignIn />} />
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/edit" element={<EditProfile />} />
+          <Route path="/notifications" element={<Notifications />} />
           <Route path="/income" element={<Income />} />
           <Route path="/expenses" element={<Expenses />} />
           <Route path="/cards" element={<Cards />} />

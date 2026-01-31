@@ -1,11 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
 
 const navItems = [
-    { icon: "grid_view", label: "Wallet", path: "/", filled: true },
-    { icon: "analytics", label: "Stats", path: "/stats" },
-    { spacer: true },
-    { icon: "receipt_long", label: "Activity", path: "/history" },
-    { icon: "settings", label: "Settings", path: "/settings" },
+    { icon: "home", label: "Beranda", path: "/" },
+    { icon: "account_balance_wallet", label: "Kartu", path: "/cards" },
+    { icon: "add_circle", label: "Tambah", path: "/add", isFab: true },
+    { icon: "pie_chart", label: "Laporan", path: "/reports" },
+    { icon: "person", label: "Profil", path: "/profile" },
 ];
 
 export default function BottomNav() {

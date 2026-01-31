@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 
 const menuItems = [
     { icon: "person", label: "Edit Profil", path: "/profile/edit" },
-    { icon: "notifications", label: "Notifikasi", path: "/settings" },
+    { icon: "notifications", label: "Notifikasi", path: "/notifications" },
     { icon: "lock", label: "Keamanan", path: "/settings" },
     { icon: "settings", label: "Pengaturan", path: "/settings" },
 ];
@@ -70,8 +70,8 @@ export default function Profile() {
                             key={item.label}
                             to={item.path}
                             className={`w-full flex items-center justify-between p-4 ${index !== menuItems.length - 1
-                                    ? "border-b border-slate-100 dark:border-slate-800"
-                                    : ""
+                                ? "border-b border-slate-100 dark:border-slate-800"
+                                : ""
                                 }`}
                         >
                             <div className="flex items-center gap-3">

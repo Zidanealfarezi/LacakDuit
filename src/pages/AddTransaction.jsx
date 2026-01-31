@@ -132,20 +132,20 @@ export default function AddTransaction() {
                     <button
                         onClick={() => setType("expense")}
                         className={`flex-1 py-2.5 text-center rounded-full text-sm font-semibold transition-all ${type === "expense"
-                            ? "bg-slate-700 text-white"
-                            : "text-slate-400"
+                            ? "bg-white shadow-sm text-expense-red dark:bg-card-dark"
+                            : "text-slate-500 hover:bg-white/50 dark:hover:bg-white/5"
                             }`}
                     >
-                        Expense
+                        Pengeluaran
                     </button>
                     <button
                         onClick={() => setType("income")}
                         className={`flex-1 py-2.5 text-center rounded-full text-sm font-semibold transition-all ${type === "income"
-                            ? "bg-slate-700 text-white"
-                            : "text-slate-400"
+                            ? "bg-white shadow-sm text-income-green dark:bg-card-dark"
+                            : "text-slate-500 hover:bg-white/50 dark:hover:bg-white/5"
                             }`}
                     >
-                        Income
+                        Pemasukan
                     </button>
                 </div>
             </div>

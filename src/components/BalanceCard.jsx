@@ -18,7 +18,7 @@ export default function BalanceCard() {
                 <div className="relative z-10">
                     <div className="flex justify-between items-start">
                         <div>
-                            <p className="text-white/70 text-sm font-medium">Total Balance</p>
+                            <p className="text-white/70 text-sm font-medium">Total Saldo</p>
                             <h2 className="text-white text-3xl font-extrabold tracking-tight mt-1">
                                 Rp {totalBalance.toLocaleString("id-ID")}
                             </h2>
@@ -30,19 +30,7 @@ export default function BalanceCard() {
                         </div>
                     </div>
                 </div>
-                <div className="relative z-10 flex justify-between items-center">
-                    <div className="flex -space-x-2">
-                        <div className="w-8 h-8 rounded-full border-2 border-primary bg-slate-800 flex items-center justify-center text-[10px] font-bold text-white">
-                            VISA
-                        </div>
-                        <div className="w-8 h-8 rounded-full border-2 border-primary bg-slate-700 flex items-center justify-center text-[10px] font-bold italic text-white">
-                            MC
-                        </div>
-                    </div>
-                    <p className="text-white/80 text-xs font-mono tracking-widest">
-                        **** 8842
-                    </p>
-                </div>
+
             </Link>
         </section>
     );

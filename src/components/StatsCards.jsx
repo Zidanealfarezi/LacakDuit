@@ -7,40 +7,28 @@ export default function StatsCards() {
     return (
         <section className="px-4 py-2 grid grid-cols-2 gap-4">
             <Link to="/income" className="bg-white dark:bg-card-dark p-5 rounded-xl border border-slate-200 dark:border-white/5 flex flex-col gap-1 active:scale-[0.98] transition-transform">
-                <div className="flex items-center gap-2 mb-2">
-                    <div className="w-7 h-7 rounded-lg bg-emerald-500/20 flex items-center justify-center">
-                        <span className="material-symbols-outlined text-emerald-500 text-lg">
-                            arrow_downward
-                        </span>
+                <div>
+                    <div className="flex items-center gap-2 mb-1">
+                        <div className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                            <span className="material-symbols-outlined text-lg">trending_up</span>
+                        </div>
+                        <span className="text-sm text-slate-500 dark:text-slate-400 font-medium">Pemasukan</span>
                     </div>
-                    <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                        Income
-                    </span>
+                    <p className="text-lg font-bold">Rp {totalIncome.toLocaleString("id-ID")}</p>
                 </div>
-                <p className="text-lg font-bold">Rp {totalIncome.toLocaleString("id-ID")}</p>
-                <p className="text-emerald-500 text-xs font-bold flex items-center gap-1">
-                    <span className="material-symbols-outlined text-sm">trending_up</span>{" "}
-                    +12%
-                </p>
             </Link>
+
+            {/* Expenses Card */}
             <Link to="/expenses" className="bg-white dark:bg-card-dark p-5 rounded-xl border border-slate-200 dark:border-white/5 flex flex-col gap-1 active:scale-[0.98] transition-transform">
-                <div className="flex items-center gap-2 mb-2">
-                    <div className="w-7 h-7 rounded-lg bg-primary/20 flex items-center justify-center">
-                        <span className="material-symbols-outlined text-primary text-lg">
-                            arrow_upward
-                        </span>
+                <div>
+                    <div className="flex items-center gap-2 mb-1">
+                        <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-red-600 dark:text-red-400">
+                            <span className="material-symbols-outlined text-lg">trending_down</span>
+                        </div>
+                        <span className="text-sm text-slate-500 dark:text-slate-400 font-medium">Pengeluaran</span>
                     </div>
-                    <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                        Expenses
-                    </span>
+                    <p className="text-lg font-bold">Rp {totalExpenses.toLocaleString("id-ID")}</p>
                 </div>
-                <p className="text-lg font-bold">Rp {totalExpenses.toLocaleString("id-ID")}</p>
-                <p className="text-primary text-xs font-bold flex items-center gap-1">
-                    <span className="material-symbols-outlined text-sm">
-                        trending_down
-                    </span>{" "}
-                    -5%
-                </p>
             </Link>
         </section>
     );
