@@ -143,13 +143,13 @@ export default function Settings() {
                             </div>
                             <span className="text-slate-500 text-sm">1.0.0</span>
                         </div>
-                        <button className="w-full flex items-center justify-between p-4 border-b border-slate-100 dark:border-slate-800">
+                        <Link to="/terms" className="w-full flex items-center justify-between p-4 border-b border-slate-100 dark:border-slate-800">
                             <div className="flex items-center gap-3">
                                 <span className="material-symbols-outlined text-primary">description</span>
                                 <span className="font-medium">Syarat & Ketentuan</span>
                             </div>
                             <span className="material-symbols-outlined text-slate-400">chevron_right</span>
-                        </button>
+                        </Link>
                         <button className="w-full flex items-center justify-between p-4">
                             <div className="flex items-center gap-3">
                                 <span className="material-symbols-outlined text-primary">policy</span>

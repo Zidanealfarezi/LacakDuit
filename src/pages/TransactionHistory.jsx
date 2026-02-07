@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { useLocation } from "react-router-dom";
 import TransactionHeader from "../components/TransactionHeader";
 import TransactionSection from "../components/TransactionSection";
 import HistoryBottomNav from "../components/HistoryBottomNav";
@@ -63,14 +64,31 @@ const transactionsData = {
 
 export default function TransactionHistory() {
     const [activeTab, setActiveTab] = useState("all");
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const searchQuery = searchParams.get("search") || "";
 
     const filterTransactions = (transactions) => {
-        if (activeTab === "all") return transactions;
-        if (activeTab === "expense")
-            return transactions.filter((tx) => !tx.isIncome);
-        if (activeTab === "income")
-            return transactions.filter((tx) => tx.isIncome);
-        return transactions;
+        let filtered = transactions;
+
+        // Filter by Tab
+        if (activeTab === "expense") {
+            filtered = filtered.filter((tx) => !tx.isIncome);
+        } else if (activeTab === "income") {
+            filtered = filtered.filter((tx) => tx.isIncome);
+        }
+
+        // Filter by Search
+        if (searchQuery) {
+            const query = searchQuery.toLowerCase();
+            filtered = filtered.filter(
+                (tx) =>
+                    tx.title.toLowerCase().includes(query) ||
+                    tx.category.toLowerCase().includes(query)
+            );
+        }
+
+        return filtered;
     };
 
     return (
@@ -78,18 +96,36 @@ export default function TransactionHistory() {
             <div className="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display min-h-screen">
                 <TransactionHeader activeTab={activeTab} onTabChange={setActiveTab} />
                 <main className="pb-24">
-                    <TransactionSection
-                        title="Hari Ini"
-                        transactions={filterTransactions(transactionsData.today)}
-                    />
-                    <TransactionSection
-                        title="Kemarin"
-                        transactions={filterTransactions(transactionsData.yesterday)}
-                    />
-                    <TransactionSection
-                        title="24 Okt 2023"
-                        transactions={filterTransactions(transactionsData.oct24)}
-                    />
+                    {filterTransactions(transactionsData.today).length === 0 &&
+                        filterTransactions(transactionsData.yesterday).length === 0 &&
+                        filterTransactions(transactionsData.oct24).length === 0 ? (
+                        <div className="flex flex-col items-center justify-center pt-20 text-slate-400 animate-fade-in">
+                            <span className="material-symbols-outlined text-6xl mb-4 text-slate-300 dark:text-slate-600">search_off</span>
+                            <p className="font-medium">Tidak ada transaksi ditemukan</p>
+                            {searchQuery && <p className="text-sm mt-1">Pencarian: "{searchQuery}"</p>}
+                        </div>
+                    ) : (
+                        <>
+                            {filterTransactions(transactionsData.today).length > 0 && (
+                                <TransactionSection
+                                    title="Hari Ini"
+                                    transactions={filterTransactions(transactionsData.today)}
+                                />
+                            )}
+                            {filterTransactions(transactionsData.yesterday).length > 0 && (
+                                <TransactionSection
+                                    title="Kemarin"
+                                    transactions={filterTransactions(transactionsData.yesterday)}
+                                />
+                            )}
+                            {filterTransactions(transactionsData.oct24).length > 0 && (
+                                <TransactionSection
+                                    title="24 Okt 2023"
+                                    transactions={filterTransactions(transactionsData.oct24)}
+                                />
+                            )}
+                        </>
+                    )}
                 </main>
                 <HistoryBottomNav />
             </div>

@@ -14,6 +14,7 @@ import Expenses from "./pages/Expenses";
 import Cards from "./pages/Cards";
 import Settings from "./pages/Settings";
 import Assets from "./pages/Assets";
+import Terms from "./pages/Terms";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           <Route path="/cards" element={<Cards />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/assets" element={<Assets />} />
+          <Route path="/terms" element={<Terms />} />
         </Routes>
       </BrowserRouter>
     </DataProvider>
