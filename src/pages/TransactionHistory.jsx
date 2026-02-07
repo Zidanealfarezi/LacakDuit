@@ -2,6 +2,7 @@ import { useState } from "react";
 import TransactionHeader from "../components/TransactionHeader";
 import TransactionSection from "../components/TransactionSection";
 import HistoryBottomNav from "../components/HistoryBottomNav";
+import PageTransition from "../components/PageTransition";
 
 const transactionsData = {
     today: [
@@ -73,23 +74,25 @@ export default function TransactionHistory() {
     };
 
     return (
-        <div className="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display min-h-screen">
-            <TransactionHeader activeTab={activeTab} onTabChange={setActiveTab} />
-            <main className="pb-24">
-                <TransactionSection
-                    title="Hari Ini"
-                    transactions={filterTransactions(transactionsData.today)}
-                />
-                <TransactionSection
-                    title="Kemarin"
-                    transactions={filterTransactions(transactionsData.yesterday)}
-                />
-                <TransactionSection
-                    title="24 Okt 2023"
-                    transactions={filterTransactions(transactionsData.oct24)}
-                />
-            </main>
-            <HistoryBottomNav />
-        </div>
+        <PageTransition>
+            <div className="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display min-h-screen">
+                <TransactionHeader activeTab={activeTab} onTabChange={setActiveTab} />
+                <main className="pb-24">
+                    <TransactionSection
+                        title="Hari Ini"
+                        transactions={filterTransactions(transactionsData.today)}
+                    />
+                    <TransactionSection
+                        title="Kemarin"
+                        transactions={filterTransactions(transactionsData.yesterday)}
+                    />
+                    <TransactionSection
+                        title="24 Okt 2023"
+                        transactions={filterTransactions(transactionsData.oct24)}
+                    />
+                </main>
+                <HistoryBottomNav />
+            </div>
+        </PageTransition>
     );
 }

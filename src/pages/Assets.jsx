@@ -1,7 +1,9 @@
+
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useData } from "../context/DataContext";
 import BottomNav from "../components/BottomNav";
+import PageTransition from "../components/PageTransition";
 
 const colorOptions = [
     { value: "bg-emerald-500", label: "Hijau" },
@@ -160,7 +162,7 @@ export default function Assets() {
     };
 
     return (
-        <>
+        <PageTransition>
             <div className="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white min-h-screen pb-24">
                 {/* Delete Confirmation Modal */}
                 {deleteConfirm && (
@@ -203,7 +205,7 @@ export default function Assets() {
                                     <label className="text-xs text-slate-500 dark:text-slate-400 font-medium">Warna</label>
                                     <div className="flex gap-2 mt-2 flex-wrap">
                                         {colorOptions.map((c) => (
-                                            <button key={c.value} onClick={() => setFormColor(c.value)} className={`w-8 h-8 rounded-full ${c.value} ${formColor === c.value ? "ring-2 ring-offset-2 ring-primary" : ""}`} />
+                                            <button key={c.value} onClick={() => setFormColor(c.value)} className={`w - 8 h - 8 rounded - full ${c.value} ${formColor === c.value ? "ring-2 ring-offset-2 ring-primary" : ""} `} />
                                         ))}
                                     </div>
                                 </div>
@@ -226,7 +228,7 @@ export default function Assets() {
                                     <label className="text-xs text-slate-500 dark:text-slate-400 font-medium">Pilih Bank</label>
                                     <div className="grid grid-cols-4 gap-2 mt-2">
                                         {bankOptions.map((bank) => (
-                                            <button key={bank.name} onClick={() => { setFormName(bank.name); setFormColor(bank.color); }} className={`p-2 rounded-xl text-xs font-semibold text-center transition-all ${formName === bank.name ? "bg-primary text-white" : "bg-slate-100 dark:bg-slate-800"}`}>
+                                            <button key={bank.name} onClick={() => { setFormName(bank.name); setFormColor(bank.color); }} className={`p - 2 rounded - xl text - xs font - semibold text - center transition - all ${formName === bank.name ? "bg-primary text-white" : "bg-slate-100 dark:bg-slate-800"} `}>
                                                 {bank.name}
                                             </button>
                                         ))}
@@ -259,7 +261,7 @@ export default function Assets() {
                                     <label className="text-xs text-slate-500 dark:text-slate-400 font-medium">Pilih E-Wallet</label>
                                     <div className="grid grid-cols-3 gap-2 mt-2">
                                         {ewalletOptions.map((ew) => (
-                                            <button key={ew.name} onClick={() => { setFormName(ew.name); setFormColor(ew.color); }} className={`p-3 rounded-xl text-xs font-semibold text-center transition-all flex flex-col items-center gap-1 ${formName === ew.name ? "bg-primary text-white" : "bg-slate-100 dark:bg-slate-800"}`}>
+                                            <button key={ew.name} onClick={() => { setFormName(ew.name); setFormColor(ew.color); }} className={`p - 3 rounded - xl text - xs font - semibold text - center transition - all flex flex - col items - center gap - 1 ${formName === ew.name ? "bg-primary text-white" : "bg-slate-100 dark:bg-slate-800"} `}>
                                                 <span className="text-xl">{ew.logo}</span>
                                                 {ew.name}
                                             </button>
@@ -306,7 +308,7 @@ export default function Assets() {
                                         <label className="text-xs text-slate-500 dark:text-slate-400 font-medium">Warna</label>
                                         <div className="flex gap-2 mt-2 flex-wrap">
                                             {colorOptions.map((c) => (
-                                                <button key={c.value} onClick={() => setFormColor(c.value)} className={`w-8 h-8 rounded-full ${c.value} ${formColor === c.value ? "ring-2 ring-offset-2 ring-primary" : ""}`} />
+                                                <button key={c.value} onClick={() => setFormColor(c.value)} className={`w - 8 h - 8 rounded - full ${c.value} ${formColor === c.value ? "ring-2 ring-offset-2 ring-primary" : ""} `} />
                                             ))}
                                         </div>
                                     </div>
@@ -369,7 +371,7 @@ export default function Assets() {
                                 cashAssets.map((item) => (
                                     <div key={item.id} className="bg-white dark:bg-card-dark p-4 rounded-xl flex items-center justify-between shadow-sm border border-transparent hover:border-primary/30 transition-all group">
                                         <div className="flex items-center gap-4 cursor-pointer" onClick={() => openEditModal("cash", item)}>
-                                            <div className={`w-12 h-12 ${item.color} rounded-xl flex items-center justify-center text-white shadow-lg`}>
+                                            <div className={`w - 12 h - 12 ${item.color} rounded - xl flex items - center justify - center text - white shadow - lg`}>
                                                 <span className="material-symbols-outlined">{item.icon}</span>
                                             </div>
                                             <div>
@@ -405,7 +407,7 @@ export default function Assets() {
                                 bankAccounts.map((item) => (
                                     <div key={item.id} className="bg-white dark:bg-card-dark p-4 rounded-xl flex items-center justify-between shadow-sm border border-transparent hover:border-primary/30 transition-all group">
                                         <div className="flex items-center gap-4 cursor-pointer" onClick={() => openEditModal("bank", item)}>
-                                            <div className={`w-12 h-12 ${item.color} rounded-xl flex items-center justify-center text-white shadow-lg`}>
+                                            <div className={`w - 12 h - 12 ${item.color} rounded - xl flex items - center justify - center text - white shadow - lg`}>
                                                 <span className="material-symbols-outlined">{item.icon}</span>
                                             </div>
                                             <div>
@@ -441,7 +443,7 @@ export default function Assets() {
                                 eWallets.map((item) => (
                                     <div key={item.id} className="bg-white dark:bg-card-dark p-4 rounded-xl flex items-center justify-between shadow-sm border border-transparent hover:border-primary/30 transition-all group">
                                         <div className="flex items-center gap-4 cursor-pointer" onClick={() => openEditModal("ewallet", item)}>
-                                            <div className={`w-12 h-12 ${item.color} rounded-xl flex items-center justify-center text-white text-xl shadow-lg`}>
+                                            <div className={`w - 12 h - 12 ${item.color} rounded - xl flex items - center justify - center text - white text - xl shadow - lg`}>
                                                 {item.logo}
                                             </div>
                                             <div>
@@ -476,6 +478,7 @@ export default function Assets() {
                 </main>
             </div>
             <BottomNav />
-        </>
+
+        </PageTransition >
     );
 }
