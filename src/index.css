@@ -18,7 +18,16 @@
 body {
   font-family: 'Manrope', sans-serif;
   -webkit-tap-highlight-color: transparent;
-  min-height: max(884px, 100dvh);
+  min-height: 100dvh;
+  background-color: var(--color-background-dark);
+  color: white;
+}
+
+@media (prefers-color-scheme: light) {
+  body {
+    background-color: var(--color-background-light);
+    color: black;
+  }
 }
 
 .glass-effect {

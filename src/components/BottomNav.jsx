@@ -2,9 +2,9 @@ import { Link, useLocation } from "react-router-dom";
 
 const navItems = [
     { icon: "home", label: "Beranda", path: "/" },
-    { icon: "account_balance_wallet", label: "Kartu", path: "/cards" },
+    { icon: "account_balance_wallet", label: "Aset Saya", path: "/assets" },
     { icon: "add_circle", label: "Tambah", path: "/add", isFab: true },
-    { icon: "pie_chart", label: "Laporan", path: "/reports" },
+    { icon: "pie_chart", label: "Laporan", path: "/stats" },
     { icon: "person", label: "Profil", path: "/profile" },
 ];
 

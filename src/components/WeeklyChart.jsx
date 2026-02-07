@@ -41,7 +41,7 @@ export default function WeeklyChart() {
                         </p>
                     </div>
                 </div>
-                <div className="flex items-end justify-between h-32 gap-2 mt-4 px-1" onMouseLeave={() => setSelectedDayIndex(null)}>
+                <div className="flex items-end justify-between h-32 gap-2 mt-4 px-1">
                     {weeklySpending.map((item, index) => {
                         const height = maxAmount > 0 ? (item.amount / maxAmount) * 100 : 10;
                         const isToday = index === weeklySpending.length - 1;
@@ -52,7 +52,6 @@ export default function WeeklyChart() {
                                 key={item.day}
                                 className="flex-1 flex flex-col items-center gap-2 cursor-pointer group"
                                 onClick={() => setSelectedDayIndex(index === selectedDayIndex ? null : index)}
-                                onMouseEnter={() => setSelectedDayIndex(index)}
                             >
                                 <div
                                     className="w-full bg-slate-100 dark:bg-white/5 rounded-t-lg relative transition-all duration-300"

@@ -14,7 +14,7 @@ const navItems = [
     { icon: "grid_view", label: "Dashboard", path: "/" },
     { icon: "analytics", label: "Stats", path: "/stats" },
     { spacer: true },
-    { icon: "credit_card", label: "Cards", path: "/cards" },
+    { icon: "account_balance_wallet", label: "Aset Saya", path: "/assets" },
     { icon: "settings", label: "Settings", path: "/settings" },
 ];
 
