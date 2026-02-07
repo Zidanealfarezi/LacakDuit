@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { useLocation } from "react-router-dom";
+import { useData } from "../context/DataContext";
 import TransactionHeader from "../components/TransactionHeader";
 import TransactionSection from "../components/TransactionSection";
 import HistoryBottomNav from "../components/HistoryBottomNav";
@@ -64,6 +65,7 @@ const transactionsData = {
 
 export default function TransactionHistory() {
     const [activeTab, setActiveTab] = useState("all");
+    const { transactions } = useData();
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const searchQuery = searchParams.get("search") || "";
@@ -73,9 +75,11 @@ export default function TransactionHistory() {
 
         // Filter by Tab
         if (activeTab === "expense") {
-            filtered = filtered.filter((tx) => !tx.isIncome);
+            filtered = filtered.filter((tx) => tx.type === "expense");
         } else if (activeTab === "income") {
-            filtered = filtered.filter((tx) => tx.isIncome);
+            filtered = filtered.filter((tx) => tx.type === "income");
+        } else if (activeTab === "transfer") { // Assuming we might want a transfer tab later, or just show them in 'all'
+            filtered = filtered.filter((tx) => tx.type === "transfer");
         }
 
         // Filter by Search
@@ -83,48 +87,62 @@ export default function TransactionHistory() {
             const query = searchQuery.toLowerCase();
             filtered = filtered.filter(
                 (tx) =>
-                    tx.title.toLowerCase().includes(query) ||
-                    tx.category.toLowerCase().includes(query)
+                    (tx.note && tx.note.toLowerCase().includes(query)) ||
+                    (tx.category && tx.category.toLowerCase().includes(query))
             );
         }
 
         return filtered;
     };
 
+    // Group transactions by date
+    const groupedTransactions = useMemo(() => {
+        const filtered = filterTransactions(transactions);
+        const groups = {};
+
+        filtered.forEach(tx => {
+            if (!groups[tx.date]) {
+                groups[tx.date] = [];
+            }
+            groups[tx.date].push(tx);
+        });
+
+        // Sort dates descending
+        return Object.keys(groups)
+            .sort((a, b) => new Date(b) - new Date(a))
+            .map(date => ({
+                date,
+                title: new Date(date).toLocaleDateString("id-ID", { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }),
+                data: groups[date]
+            }));
+    }, [transactions, activeTab, searchQuery]);
+
     return (
         <PageTransition>
             <div className="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display min-h-screen">
                 <TransactionHeader activeTab={activeTab} onTabChange={setActiveTab} />
                 <main className="pb-24">
-                    {filterTransactions(transactionsData.today).length === 0 &&
-                        filterTransactions(transactionsData.yesterday).length === 0 &&
-                        filterTransactions(transactionsData.oct24).length === 0 ? (
+                    {groupedTransactions.length === 0 ? (
                         <div className="flex flex-col items-center justify-center pt-20 text-slate-400 animate-fade-in">
                             <span className="material-symbols-outlined text-6xl mb-4 text-slate-300 dark:text-slate-600">search_off</span>
                             <p className="font-medium">Tidak ada transaksi ditemukan</p>
                             {searchQuery && <p className="text-sm mt-1">Pencarian: "{searchQuery}"</p>}
                         </div>
                     ) : (
-                        <>
-                            {filterTransactions(transactionsData.today).length > 0 && (
-                                <TransactionSection
-                                    title="Hari Ini"
-                                    transactions={filterTransactions(transactionsData.today)}
-                                />
-                            )}
-                            {filterTransactions(transactionsData.yesterday).length > 0 && (
-                                <TransactionSection
-                                    title="Kemarin"
-                                    transactions={filterTransactions(transactionsData.yesterday)}
-                                />
-                            )}
-                            {filterTransactions(transactionsData.oct24).length > 0 && (
-                                <TransactionSection
-                                    title="24 Okt 2023"
-                                    transactions={filterTransactions(transactionsData.oct24)}
-                                />
-                            )}
-                        </>
+                        groupedTransactions.map((group) => (
+                            <TransactionSection
+                                key={group.date}
+                                title={group.title}
+                                transactions={group.data.map(tx => ({
+                                    icon: tx.icon,
+                                    title: tx.note || tx.category,
+                                    time: "00:00", // We assume date only for now, can add time if tracked
+                                    category: tx.category,
+                                    amount: tx.amount,
+                                    type: tx.type
+                                }))}
+                            />
+                        ))
                     )}
                 </main>
                 <HistoryBottomNav />
