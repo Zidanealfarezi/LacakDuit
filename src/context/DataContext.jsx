@@ -53,6 +53,17 @@ export function DataProvider({ children }) {
         return saved ? JSON.parse(saved) : [];
     });
 
+    const [userProfile, setUserProfile] = useState(() => {
+        const saved = localStorage.getItem("userProfile_v1");
+        return saved ? JSON.parse(saved) : {
+            name: "Zidane Zidan",
+            email: "zidane@example.com",
+            phone: "08123456789",
+            profileImage: null
+        };
+    });
+
+
     // Persist to localStorage
     useEffect(() => {
         localStorage.setItem("transactions_v2", JSON.stringify(transactions));
@@ -73,6 +84,11 @@ export function DataProvider({ children }) {
     useEffect(() => {
         localStorage.setItem("customCategories_v2", JSON.stringify(customCategories));
     }, [customCategories]);
+
+    useEffect(() => {
+        localStorage.setItem("userProfile_v1", JSON.stringify(userProfile));
+    }, [userProfile]);
+
 
     // Calculate transaction totals
     const totalIncome = transactions
@@ -352,6 +368,11 @@ export function DataProvider({ children }) {
         setCustomCategories(prev => prev.filter(c => c.id !== id));
     };
 
+    const updateUserProfile = (newData) => {
+        setUserProfile(prev => ({ ...prev, ...newData }));
+    };
+
+
     // Get recent transactions
     const recentTransactions = transactions.slice(0, 5);
 
@@ -394,6 +415,10 @@ export function DataProvider({ children }) {
         customCategories,
         addCustomCategory,
         deleteCustomCategory,
+
+        // User Profile
+        userProfile,
+        updateUserProfile,
     };
 
     return (

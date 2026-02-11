@@ -1,15 +1,28 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useData } from "../context/DataContext";
 
 export default function EditProfile() {
     const navigate = useNavigate();
+    const { userProfile, updateUserProfile } = useData();
     const fileInputRef = useRef(null);
-    const [profileImage, setProfileImage] = useState(null);
+    const [profileImage, setProfileImage] = useState(userProfile.profileImage);
     const [formData, setFormData] = useState({
-        fullName: "John Doe",
-        email: "john.doe@email.com",
-        phone: "08123456789",
+        name: userProfile.name,
+        email: userProfile.email,
+        phone: userProfile.phone,
     });
+
+    useEffect(() => {
+        if (userProfile) {
+            setFormData({
+                name: userProfile.name,
+                email: userProfile.email,
+                phone: userProfile.phone,
+            });
+            setProfileImage(userProfile.profileImage);
+        }
+    }, [userProfile]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -22,8 +35,11 @@ export default function EditProfile() {
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
-            const imageUrl = URL.createObjectURL(file);
-            setProfileImage(imageUrl);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setProfileImage(reader.result);
+            };
+            reader.readAsDataURL(file);
         }
     };
 
@@ -33,8 +49,11 @@ export default function EditProfile() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Here you would typically send the data to your backend
-        console.log("Saving profile:", { ...formData, profileImage });
+
+        updateUserProfile({
+            ...formData,
+            profileImage
+        });
 
         // Navigate back to profile page
         navigate("/profile");
@@ -88,8 +107,8 @@ export default function EditProfile() {
                             <span className="material-symbols-outlined text-slate-400">person</span>
                             <input
                                 type="text"
-                                name="fullName"
-                                value={formData.fullName}
+                                name="name"
+                                value={formData.name}
                                 onChange={handleChange}
                                 className="bg-transparent w-full outline-none font-medium placeholder:text-slate-300"
                                 placeholder="Masukkan nama lengkap"

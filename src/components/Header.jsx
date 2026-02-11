@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useData } from "../context/DataContext";
 
 export default function Header() {
     const navigate = useNavigate();
+    const { userProfile } = useData();
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
 
@@ -15,6 +17,9 @@ export default function Header() {
         }
     };
 
+    // Default image if no profile image
+    const defaultImage = 'https://lh3.googleusercontent.com/aida-public/AB6AXuDQbhyRIGC7WN1lLjVeQFOp0X10Z5IQke12-epqcNbgFqX7GAGAe86f4uOvDHw43kjgbWFzdY8Yoc9NIrfvgihCUAqiEa-pJmRMcyC0pCYML_1sfksb0HXCn4mMUEWFqEp37yi07ATMkz7zvgywh5eoOo2dQFkbMKO1dVog5eTa0Q4xn-BfHFdsK9NOK_vqSdmLqnK82PbLIO73Dnj6meFhTBhGmFOybc2gZlPIa84koLCUts8PS8cHPFnf15yR0Dav6BWKZy41LA';
+
     return (
         <nav className="sticky top-0 z-40 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md px-4 py-5 flex items-center justify-between transition-all">
             {!isSearchOpen ? (
@@ -23,15 +28,14 @@ export default function Header() {
                         <div
                             className="w-14 h-14 rounded-full bg-cover bg-center border-2 border-primary/30 shadow-lg"
                             style={{
-                                backgroundImage:
-                                    'url("https://lh3.googleusercontent.com/aida-public/AB6AXuDQbhyRIGC7WN1lLjVeQFOp0X10Z5IQke12-epqcNbgFqX7GAGAe86f4uOvDHw43kjgbWFzdY8Yoc9NIrfvgihCUAqiEa-pJmRMcyC0pCYML_1sfksb0HXCn4mMUEWFqEp37yi07ATMkz7zvgywh5eoOo2dQFkbMKO1dVog5eTa0Q4xn-BfHFdsK9NOK_vqSdmLqnK82PbLIO73Dnj6meFhTBhGmFOybc2gZlPIa84koLCUts8PS8cHPFnf15yR0Dav6BWKZy41LA")',
+                                backgroundImage: `url("${userProfile.profileImage || defaultImage}")`,
                             }}
                         ></div>
                         <div>
                             <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">
                                 Good morning,
                             </p>
-                            <h1 className="text-xl font-bold">Zidane Zidan</h1>
+                            <h1 className="text-xl font-bold capitalize">{userProfile.name}</h1>
                         </div>
                     </Link>
                     <div className="flex gap-2">

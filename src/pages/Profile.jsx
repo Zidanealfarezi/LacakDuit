@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import { useData } from "../context/DataContext";
 import PageTransition from "../components/PageTransition";
 
 const menuItems = [
@@ -18,7 +19,17 @@ const navItems = [
 
 export default function Profile() {
     const location = useLocation();
+    const { userProfile } = useData();
 
+    // Get initials from name
+    const getInitials = (name) => {
+        return name
+            .split(" ")
+            .map((n) => n[0])
+            .join("")
+            .toUpperCase()
+            .substring(0, 2);
+    };
 
     return (
         <PageTransition>
@@ -34,12 +45,16 @@ export default function Profile() {
 
                     {/* Profile Card */}
                     <div className="flex items-center gap-4">
-                        <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-primary/30">
-                            JD
+                        <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-primary/30 overflow-hidden">
+                            {userProfile.profileImage ? (
+                                <img src={userProfile.profileImage} alt="Profile" className="w-full h-full object-cover" />
+                            ) : (
+                                getInitials(userProfile.name)
+                            )}
                         </div>
                         <div>
-                            <h2 className="text-xl font-bold">John Doe</h2>
-                            <p className="text-slate-400 text-sm">john.doe@email.com</p>
+                            <h2 className="text-xl font-bold">{userProfile.name}</h2>
+                            <p className="text-slate-400 text-sm">{userProfile.email}</p>
                         </div>
                     </div>
                 </div>
