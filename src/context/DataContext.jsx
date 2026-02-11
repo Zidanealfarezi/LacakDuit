@@ -63,6 +63,11 @@ export function DataProvider({ children }) {
         };
     });
 
+    const [loans, setLoans] = useState(() => {
+        const saved = localStorage.getItem("loans_v1");
+        return saved ? JSON.parse(saved) : [];
+    });
+
 
     // Persist to localStorage
     useEffect(() => {
@@ -88,6 +93,10 @@ export function DataProvider({ children }) {
     useEffect(() => {
         localStorage.setItem("userProfile_v1", JSON.stringify(userProfile));
     }, [userProfile]);
+
+    useEffect(() => {
+        localStorage.setItem("loans_v1", JSON.stringify(loans));
+    }, [loans]);
 
 
     // Calculate transaction totals
@@ -372,6 +381,107 @@ export function DataProvider({ children }) {
         setUserProfile(prev => ({ ...prev, ...newData }));
     };
 
+    // Loan & Installment Logic
+    const totalDebt = loans
+        .filter(l => l.status === 'active')
+        .reduce((sum, l) => sum + l.remainingAmount, 0);
+
+    const addLoan = (loanData) => {
+        const totalRepayment = loanData.monthlyInstallment * loanData.tenor;
+
+        const newLoan = {
+            id: Date.now(),
+            ...loanData,
+            totalAmount: totalRepayment, // This is the DEBT amount (Installment * Tenor)
+            remainingAmount: totalRepayment,
+            principalAmount: loanData.principalAmount, // Store original price/cash
+            paidAmount: 0,
+            status: 'active', // active, paid
+            currentTenor: 0,
+            history: []
+        };
+
+        setLoans(prev => [newLoan, ...prev]);
+
+        // If Cash Loan, increase Main Wallet (or selected asset) by PRINCIPAL amount
+        if (loanData.type === 'cash' && loanData.targetAssetId) {
+            const amount = loanData.principalAmount; // Use principal, not repayment total
+            const assetId = loanData.targetAssetId;
+            const assetType = loanData.targetAssetType;
+
+            // Update Asset Balance
+            if (assetType === "cash") {
+                setCashAssets(prev => prev.map(a => a.id === assetId ? { ...a, amount: a.amount + amount } : a));
+            } else if (assetType === "bank") {
+                setBankAccounts(prev => prev.map(a => a.id === assetId ? { ...a, amount: a.amount + amount } : a));
+            } else if (assetType === "ewallet") {
+                setEWallets(prev => prev.map(a => a.id === assetId ? { ...a, amount: a.amount + amount } : a));
+            }
+
+            // Record as "Incoming Loan" Transaction (Income)
+            const loanTx = {
+                id: Date.now() + 1,
+                type: "income",
+                category: "Pinjaman",
+                icon: "sentiment_satisfied",
+                amount: amount,
+                date: formatDate(new Date()),
+                note: `Pinjaman: ${loanData.name}`,
+                assetId, assetType
+            };
+            setTransactions(prev => [loanTx, ...prev]);
+        }
+    };
+
+    const payInstallment = (loanId, amount, sourceAssetId, sourceAssetType, note = "") => {
+        const loan = loans.find(l => l.id === loanId);
+        if (!loan) return;
+
+        // 1. Record Payment Transaction (Expense)
+        const paymentTx = {
+            id: Date.now(),
+            type: "expense",
+            category: "Cicilan",
+            icon: "credit_score",
+            amount: amount,
+            date: formatDate(new Date()),
+            note: note || `Cicilan ${loan.name} (${loan.currentTenor + 1}/${loan.tenor})`,
+            assetId: sourceAssetId,
+            assetType: sourceAssetType
+        };
+        setTransactions(prev => [paymentTx, ...prev]);
+
+        // 2. Deduct from Source Asset
+        if (sourceAssetType === "cash") {
+            setCashAssets(prev => prev.map(a => a.id === sourceAssetId ? { ...a, amount: a.amount - amount } : a));
+        } else if (sourceAssetType === "bank") {
+            setBankAccounts(prev => prev.map(a => a.id === sourceAssetId ? { ...a, amount: a.amount - amount } : a));
+        } else if (sourceAssetType === "ewallet") {
+            setEWallets(prev => prev.map(a => a.id === sourceAssetId ? { ...a, amount: a.amount - amount } : a));
+        }
+
+        // 3. Update Loan Status
+        const newPaidAmount = loan.paidAmount + amount;
+        const newRemainingAmount = loan.totalAmount - newPaidAmount;
+        const newStatus = newRemainingAmount <= 0 ? 'paid' : 'active';
+        const newCurrentTenor = loan.currentTenor + 1;
+
+        setLoans(prev => prev.map(l => l.id === loanId ? {
+            ...l,
+            paidAmount: newPaidAmount,
+            remainingAmount: newRemainingAmount > 0 ? newRemainingAmount : 0,
+            status: newStatus,
+            currentTenor: newCurrentTenor,
+            history: [...l.history, { date: formatDate(new Date()), amount, note }]
+        } : l));
+    };
+
+    const deleteLoan = (id) => {
+        setLoans(prev => prev.filter(l => l.id !== id));
+        // Note: Use caution with deleting loans as it affects "Total Debt" but doesn't revert balance changes automatically 
+        // to keep history intact. Ideally, should only archive.
+    };
+
 
     // Get recent transactions
     const recentTransactions = transactions.slice(0, 5);
@@ -419,6 +529,13 @@ export function DataProvider({ children }) {
         // User Profile
         userProfile,
         updateUserProfile,
+
+        // Loans
+        loans,
+        totalDebt,
+        addLoan,
+        payInstallment,
+        deleteLoan,
     };
 
     return (

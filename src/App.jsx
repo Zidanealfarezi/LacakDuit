@@ -15,6 +15,8 @@ import Cards from "./pages/Cards";
 import Settings from "./pages/Settings";
 import Assets from "./pages/Assets";
 import Terms from "./pages/Terms";
+import AddLoan from "./pages/AddLoan";
+import LoanList from "./pages/LoanList";
 
 function App() {
   return (
@@ -36,6 +38,8 @@ function App() {
           <Route path="/settings" element={<Settings />} />
           <Route path="/assets" element={<Assets />} />
           <Route path="/terms" element={<Terms />} />
+          <Route path="/loans" element={<LoanList />} />
+          <Route path="/loans/add" element={<AddLoan />} />
         </Routes>
       </BrowserRouter>
     </DataProvider>
