@@ -2,6 +2,7 @@
 import Header from "../components/Header";
 import BalanceCard from "../components/BalanceCard";
 import StatsCards from "../components/StatsCards";
+import DebtCard from "../components/DebtCard";
 import WeeklyChart from "../components/WeeklyChart";
 import TransactionList from "../components/TransactionList";
 import BottomNav from "../components/BottomNav";
@@ -17,6 +18,7 @@ export default function Dashboard() {
                 <div className="max-w-md mx-auto">
                     <Header />
                     <BalanceCard />
+                    <DebtCard />
                     <StatsCards />
                     <WeeklyChart />
                     <TransactionList />

@@ -45,12 +45,6 @@ export default function Header() {
                         >
                             <span className="material-symbols-outlined text-[24px]">search</span>
                         </button>
-                        <button className="w-11 h-11 flex items-center justify-center rounded-full bg-slate-200/50 dark:bg-white/5 transition-colors relative active:scale-95 hover:bg-slate-300/50 dark:hover:bg-white/10">
-                            <span className="material-symbols-outlined text-[24px]">
-                                notifications
-                            </span>
-                            <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-background-dark"></span>
-                        </button>
                     </div>
                 </>
             ) : (

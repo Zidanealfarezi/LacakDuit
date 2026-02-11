@@ -403,19 +403,19 @@ export function DataProvider({ children }) {
 
         setLoans(prev => [newLoan, ...prev]);
 
-        // If Cash Loan, increase Main Wallet (or selected asset) by PRINCIPAL amount
+        // If Cash Loan, increase Main Wallet (or selected asset) by RECEIVED amount
         if (loanData.type === 'cash' && loanData.targetAssetId) {
-            const amount = loanData.principalAmount; // Use principal, not repayment total
+            const amountToAdd = loanData.receivedAmount || loanData.principalAmount; // Use received amount if available
             const assetId = loanData.targetAssetId;
             const assetType = loanData.targetAssetType;
 
             // Update Asset Balance
             if (assetType === "cash") {
-                setCashAssets(prev => prev.map(a => a.id === assetId ? { ...a, amount: a.amount + amount } : a));
+                setCashAssets(prev => prev.map(a => a.id === assetId ? { ...a, amount: a.amount + amountToAdd } : a));
             } else if (assetType === "bank") {
-                setBankAccounts(prev => prev.map(a => a.id === assetId ? { ...a, amount: a.amount + amount } : a));
+                setBankAccounts(prev => prev.map(a => a.id === assetId ? { ...a, amount: a.amount + amountToAdd } : a));
             } else if (assetType === "ewallet") {
-                setEWallets(prev => prev.map(a => a.id === assetId ? { ...a, amount: a.amount + amount } : a));
+                setEWallets(prev => prev.map(a => a.id === assetId ? { ...a, amount: a.amount + amountToAdd } : a));
             }
 
             // Record as "Incoming Loan" Transaction (Income)
@@ -424,7 +424,7 @@ export function DataProvider({ children }) {
                 type: "income",
                 category: "Pinjaman",
                 icon: "sentiment_satisfied",
-                amount: amount,
+                amount: amountToAdd,
                 date: formatDate(new Date()),
                 note: `Pinjaman: ${loanData.name}`,
                 assetId, assetType
@@ -476,10 +476,45 @@ export function DataProvider({ children }) {
         } : l));
     };
 
-    const deleteLoan = (id) => {
-        setLoans(prev => prev.filter(l => l.id !== id));
-        // Note: Use caution with deleting loans as it affects "Total Debt" but doesn't revert balance changes automatically 
-        // to keep history intact. Ideally, should only archive.
+    const deleteLoan = (loanId) => {
+        const loan = loans.find(l => l.id === loanId);
+        if (!loan) return;
+
+        // 1. Remove from loans list
+        setLoans(prev => prev.filter(l => l.id !== loanId));
+
+        // 2. If Cash Loan, revert the balance addition (subtract received amount)
+        if (loan.type === 'cash' && loan.targetAssetId) {
+            const amountToRevert = loan.receivedAmount || loan.principalAmount;
+            const assetId = loan.targetAssetId;
+            const assetType = loan.targetAssetType;
+
+            // Helper to update asset list
+            const updateAssetList = (list) => {
+                return list.map(a => a.id === assetId ? { ...a, amount: a.amount - amountToRevert } : a);
+            };
+
+            if (assetType === "cash") {
+                setCashAssets(prev => updateAssetList(prev));
+            } else if (assetType === "bank") {
+                setBankAccounts(prev => updateAssetList(prev));
+            } else if (assetType === "ewallet") {
+                setEWallets(prev => updateAssetList(prev));
+            }
+
+            // Record Reversal Transaction
+            const reversalTx = {
+                id: Date.now(),
+                type: "expense",
+                category: "Koreksi Saldo",
+                icon: "history_toggle_off",
+                amount: amountToRevert,
+                date: formatDate(new Date()),
+                note: `Hapus Pinjaman: ${loan.name}`,
+                assetId, assetType
+            };
+            setTransactions(prev => [reversalTx, ...prev]);
+        }
     };
 
 

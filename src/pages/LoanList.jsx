@@ -4,7 +4,7 @@ import { useData } from "../context/DataContext";
 import PageTransition from "../components/PageTransition";
 
 export default function LoanList() {
-    const { loans, payInstallment, getAllAssets } = useData();
+    const { loans, payInstallment, getAllAssets, deleteLoan } = useData();
     const [selectedLoan, setSelectedLoan] = useState(null);
     const [isPayModalOpen, setIsPayModalOpen] = useState(false);
 
@@ -94,14 +94,27 @@ export default function LoanList() {
                                                 <div className="flex items-center gap-2 mb-1">
                                                     <span className={`w-2 h-2 rounded-full ${loan.type === 'cash' ? 'bg-emerald-500' : 'bg-orange-500'}`}></span>
                                                     <span className="text-xs text-slate-400 capitalize">
-                                                        {loan.type === 'cash' ? 'Pinjaman Tunai' : (loan.provider ? loan.provider.name : 'Paylater')}
+                                                        {loan.provider ? loan.provider.name : (loan.type === 'cash' ? 'Pinjaman Tunai' : 'Paylater')}
                                                     </span>
                                                 </div>
                                                 <h3 className="font-bold text-lg">{loan.name}</h3>
                                             </div>
-                                            <div className="text-right">
-                                                <p className="text-xs text-slate-400">Sisa Hutang</p>
-                                                <p className="font-bold text-red-500">{formatCurrency(loan.remainingAmount)}</p>
+                                            <div className="flex flex-col items-end gap-1">
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        if (window.confirm("Apakah Anda yakin ingin menghapus cicilan ini? Data yang dihapus tidak dapat dikembalikan.")) {
+                                                            deleteLoan(loan.id);
+                                                        }
+                                                    }}
+                                                    className="w-8 h-8 flex items-center justify-center rounded-full text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors -mr-2 -mt-2 mb-1"
+                                                >
+                                                    <span className="material-symbols-outlined text-xl">delete</span>
+                                                </button>
+                                                <div className="text-right">
+                                                    <p className="text-xs text-slate-400">Sisa Hutang</p>
+                                                    <p className="font-bold text-red-500">{formatCurrency(loan.remainingAmount)}</p>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -125,11 +138,18 @@ export default function LoanList() {
                                                     <p className="text-xs text-slate-500 italic">"{loan.note}"</p>
                                                 </div>
                                             )}
-                                            {loan.dueDate && (
-                                                <div className="mb-4 bg-red-50 dark:bg-red-500/10 p-3 rounded-lg flex items-center gap-2 text-red-600 dark:text-red-400">
-                                                    <span className="material-symbols-outlined text-sm">calendar_month</span>
-                                                    <p className="text-xs font-bold">Jatuh Tempo: Tgl {loan.dueDate}</p>
+                                            {loan.startDate ? (
+                                                <div className="mb-4 bg-blue-50 dark:bg-blue-500/10 p-3 rounded-lg flex items-center gap-2 text-blue-600 dark:text-blue-400">
+                                                    <span className="material-symbols-outlined text-sm">event</span>
+                                                    <p className="text-xs font-bold">Mulai: {new Date(loan.startDate).toLocaleDateString("id-ID", { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                                                 </div>
+                                            ) : (
+                                                loan.dueDate && (
+                                                    <div className="mb-4 bg-red-50 dark:bg-red-500/10 p-3 rounded-lg flex items-center gap-2 text-red-600 dark:text-red-400">
+                                                        <span className="material-symbols-outlined text-sm">calendar_month</span>
+                                                        <p className="text-xs font-bold">Jatuh Tempo: Tgl {loan.dueDate}</p>
+                                                    </div>
+                                                )
                                             )}
                                         </div>
 
